@@ -33,8 +33,9 @@ function Hero() {
 
               <div class="mt-5 max-w-3xl">
                 <p class="text-lg text-gray-600 dark:text-gray-400">
-                  Othersify is a platform, that aims to provide simple yet
-                  useful web apps that help people in everyday tasks.
+                  Empowering your daily routines with a suite of essential and
+                  user-friendly web apps, simplifying tasks and maximizing
+                  productivity
                 </p>
               </div>
 
