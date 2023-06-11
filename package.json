@@ -17,6 +17,7 @@
     "vite-plugin-solid": "^2.5.0"
   },
   "dependencies": {
+    "@solidjs/router": "^0.8.2",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "lucide-solid": "^0.241.0",
