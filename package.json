@@ -17,6 +17,11 @@
     "vite-plugin-solid": "^2.5.0"
   },
   "dependencies": {
-    "solid-js": "^1.6.10"
+    "class-variance-authority": "^0.6.0",
+    "clsx": "^1.2.1",
+    "lucide-solid": "^0.241.0",
+    "solid-js": "^1.6.10",
+    "tailwind-merge": "^1.13.1",
+    "tailwindcss-animate": "^1.0.6"
   }
 }
