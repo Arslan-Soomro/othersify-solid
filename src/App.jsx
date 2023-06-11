@@ -3,8 +3,7 @@ import Home from "@src/components/Homepage/Home";
 import { Routes, Route } from "@solidjs/router";
 import NavLayout from "./components/Layouts/NavLayout";
 import Signup from "./components/Signup/Signup";
-
-// TODO install tailwind forms
+import Login from "./components/Login/Login";
 
 function App() {
   return (
@@ -12,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" component={<Home />} />
         <Route path="/signup" component={<Signup />} />
+        <Route path="/login" component={<Login />} />
       </Routes>
     </div>
   );
