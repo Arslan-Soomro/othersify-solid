@@ -1,7 +1,7 @@
 function App() {
   return (
     <div>
-      <p>Othersify Homepage</p>
+      <p className="text-blue-500">Othersify Homepage</p>
     </div>
   );
 }
