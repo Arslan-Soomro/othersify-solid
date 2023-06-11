@@ -34,6 +34,9 @@
     --ring: 215 20.2% 65.1%;
 
     --radius: 0.5rem;
+
+    --font-primary: "Raleway";
+    --font-secondary: "Nunito Sans"
   }
 
   .dark {
@@ -77,5 +80,11 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-prim font-bold;
+  }
+  :not(h1, h2, h3, h4, h5, h6){
+    @apply font-seco;
   }
 }
