@@ -1,17 +1,56 @@
+import { createSignal } from "solid-js";
+import * as Yup from "yup";
+import { validate } from "../../utils/utils";
+
+// Create a user validation schema with Yup
+const userValidationSchema = Yup.object({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string().required("Password is required"),
+  confirm_password: Yup.string().required("Confirm Password is required").oneOf(
+    [Yup.ref("password"), null],
+    "Passwords must match"
+  ),
+});
+
 function SignupForm() {
+
+  const [errors, setErrors] = createSignal(null);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    // Extract Form Data
+    const formData = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
+      confirm_password: e.target.confirm_password.value,
+    };
+
+    // Validate Form Data
+    const {data, errors} = await validate(formData, userValidationSchema);
+    setErrors(errors);
+    if(errors) return; 
+
+    // Submit Form Data to Supabase
+  }
+
   return (
-    <form action="#" class="mt-8 grid grid-cols-6 gap-6">
+    <form onSubmit={handleSubmit} class="mt-8 grid grid-cols-6 gap-6">
       <div class="col-span-6">
         <label for="Name" class="block text-sm font-medium text-gray-700">
           Name
         </label>
-
         <input
           type="text"
           id="Name"
-          name="Name"
+          name="name"
           class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
         />
+        {errors()?.name ? <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.name}</p> : null}
       </div>
 
       <div class="col-span-6">
@@ -25,6 +64,8 @@ function SignupForm() {
           name="email"
           class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
         />
+        {errors()?.email ? <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.email}</p> : null}
+
       </div>
 
       <div class="col-span-6 sm:col-span-3">
@@ -38,6 +79,8 @@ function SignupForm() {
           name="password"
           class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
         />
+        {errors()?.password ? <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.password}</p> : null}
+
       </div>
 
       <div class="col-span-6 sm:col-span-3">
@@ -51,9 +94,11 @@ function SignupForm() {
         <input
           type="password"
           id="PasswordConfirmation"
-          name="password_confirmation"
+          name="confirm_password"
           class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
         />
+        {errors()?.confirm_password ? <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.confirm_password}</p> : null}
+
       </div>
 
       <div class="col-span-6">
