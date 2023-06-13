@@ -1,6 +1,9 @@
-import { createSignal } from "solid-js";
+import { createSignal, createEffect } from "solid-js";
 import * as Yup from "yup";
 import { validate } from "../../utils/utils";
+import { addUserMetadata } from "../../utils/supaUtils";
+import toast from "solid-toast";
+import { supabase } from "../../services/supabase";
 
 // Create a user validation schema with Yup
 const userValidationSchema = Yup.object({
@@ -9,15 +12,16 @@ const userValidationSchema = Yup.object({
     .email("Invalid email address")
     .required("Email is required"),
   password: Yup.string().required("Password is required"),
-  confirm_password: Yup.string().required("Confirm Password is required").oneOf(
-    [Yup.ref("password"), null],
-    "Passwords must match"
-  ),
+  confirm_password: Yup.string()
+    .required("Confirm Password is required")
+    .oneOf([Yup.ref("password"), null], "Passwords must match"),
 });
 
-function SignupForm() {
+// Add a loading state while signing the user up.
 
+function SignupForm() {
   const [errors, setErrors] = createSignal(null);
+  const [isLoading, setIsLoading] = createSignal(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -31,11 +35,49 @@ function SignupForm() {
     };
 
     // Validate Form Data
-    const {data, errors} = await validate(formData, userValidationSchema);
+    const { errors } = await validate(formData, userValidationSchema);
     setErrors(errors);
-    if(errors) return; 
+    if (errors) {
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+    const toastId = toast.loading("Signing you up...");
 
     // Submit Form Data to Supabase
+    const { data, error } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      setIsLoading(false);
+      toast.error(error, { id: toastId });
+      return;
+    }
+
+    // Add user to users table
+    const { error: userMetadataError } = addUserMetadata({
+      id: data.user.id,
+      email: data.user.email,
+      name: formData.name,
+    });
+
+    if (error) {
+      setIsLoading(false);
+      toast.error(userMetadataError, { id: toastId });
+    } else {
+      setIsLoading(false);
+      e.target.reset();
+      toast.success(
+        "Signup Successful. Please check your email for verification link.",
+        { id: toastId }
+      );
+    }
   }
 
   return (
@@ -50,7 +92,9 @@ function SignupForm() {
           name="name"
           class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
         />
-        {errors()?.name ? <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.name}</p> : null}
+        {errors()?.name ? (
+          <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.name}</p>
+        ) : null}
       </div>
 
       <div class="col-span-6">
@@ -64,8 +108,9 @@ function SignupForm() {
           name="email"
           class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
         />
-        {errors()?.email ? <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.email}</p> : null}
-
+        {errors()?.email ? (
+          <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.email}</p>
+        ) : null}
       </div>
 
       <div class="col-span-6 sm:col-span-3">
@@ -79,8 +124,9 @@ function SignupForm() {
           name="password"
           class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
         />
-        {errors()?.password ? <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.password}</p> : null}
-
+        {errors()?.password ? (
+          <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.password}</p>
+        ) : null}
       </div>
 
       <div class="col-span-6 sm:col-span-3">
@@ -97,8 +143,11 @@ function SignupForm() {
           name="confirm_password"
           class="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
         />
-        {errors()?.confirm_password ? <p class="text-sm text-red-500 ml-2 mt-1">{errors()?.confirm_password}</p> : null}
-
+        {errors()?.confirm_password ? (
+          <p class="text-sm text-red-500 ml-2 mt-1">
+            {errors()?.confirm_password}
+          </p>
+        ) : null}
       </div>
 
       <div class="col-span-6">
@@ -132,7 +181,10 @@ function SignupForm() {
       </div>
 
       <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
-        <button class="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
+        <button
+          disabled={!!isLoading()}
+          class="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+        >
           Create an account
         </button>
 

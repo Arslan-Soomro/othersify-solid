@@ -6,10 +6,12 @@ import Signup from "./components/Signup/Signup";
 import Login from "./components/Login/Login";
 import EmailRoutes from "./components/EmailApp/EmailRoutes";
 import Navbar from "./components/ui/Navbar";
+import { Toaster } from "solid-toast";
 
 function App() {
   return (
     <div className="App h-full">
+      <Toaster />
       <Routes>
         <Route path="/" component={<Home />} />
         <Route path="/signup" component={<Signup />} />
