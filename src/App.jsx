@@ -4,7 +4,7 @@ import { Routes, Route } from "@solidjs/router";
 import NavLayout from "./components/Layouts/NavLayout";
 import Signup from "./components/Signup/Signup";
 import Login from "./components/Login/Login";
-import EmailRoutes from "./components/Email/EmailRoutes";
+import EmailRoutes from "./components/EmailApp/EmailRoutes";
 import Navbar from "./components/ui/Navbar";
 
 function App() {
