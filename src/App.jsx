@@ -4,6 +4,8 @@ import { Routes, Route } from "@solidjs/router";
 import NavLayout from "./components/Layouts/NavLayout";
 import Signup from "./components/Signup/Signup";
 import Login from "./components/Login/Login";
+import EmailRoutes from "./components/Email/EmailRoutes";
+import Navbar from "./components/ui/Navbar";
 
 function App() {
   return (
@@ -12,6 +14,13 @@ function App() {
         <Route path="/" component={<Home />} />
         <Route path="/signup" component={<Signup />} />
         <Route path="/login" component={<Login />} />
+        {/* App Routes */}
+        <Route path="/a"> 
+        <Navbar />
+          {/* Email App Routes */}
+          <EmailRoutes />
+
+        </Route>
       </Routes>
     </div>
   );

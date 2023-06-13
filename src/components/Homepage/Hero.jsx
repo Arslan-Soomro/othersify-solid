@@ -1,5 +1,4 @@
 import { DoorClosed } from "lucide-solid";
-import Navbar from "../Navbar";
 
 function Hero() {
   return (
