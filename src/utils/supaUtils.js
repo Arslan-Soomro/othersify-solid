@@ -7,7 +7,7 @@ export async function addUserMetadata(userData) {
 }
 
 export async function updateUserEmailVerificationStatus(userId, status) {
-    console.log("[updateUserEmailVerificationStatus] userId: ", userId, " status: ", status);
+  // console.log("[updateUserEmailVerificationStatus] userId: ", userId, " status: ", status);
   const { error } = await supabase
     .from("users")
     .update({ email_verified: status })

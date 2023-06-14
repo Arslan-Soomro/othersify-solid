@@ -14,10 +14,10 @@ function App() {
     <div className="App h-full">
       <Toaster />
       <Routes>
-        <Route path="/" component={<Home />} />
-        <Route path="/signup" component={<Signup />} />
-        <Route path="/login" component={<Login />} />
-        <Route path="/auth/callback" component={<EmailConfirmationRedirect />} />
+        <Route path="/" component={Home} />
+        <Route path="/signup" component={Signup} />
+        <Route path="/login" component={Login} />
+        <Route path="/auth/callback" component={EmailConfirmationRedirect} />
         {/* App Routes */}
         <Route path="/a">
           {/* Email App Routes */}

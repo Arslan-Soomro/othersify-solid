@@ -10,15 +10,16 @@ import { updateUserEmailVerificationStatus } from "../utils/supaUtils";
 function EmailConfirmationRedirect() {
   const { user } = useAuthContext();
   const navigate = useNavigate();
-
+  
   createEffect(() => {
     if (user()) {
       updateUserEmailVerificationStatus(user().id, true).then((res) => {
-        console.log("res: ", res);
+        if(res.error) console.log("[EmailConfirmationRedirect] Error: ", res.error);
         navigate("/a/email/app", { replace: true });
       }) 
     }
   });
+  
 
   return (
     <div class="w-full h-full flex flex-col items-center justify-center gap-3">
