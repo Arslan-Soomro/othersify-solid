@@ -11,7 +11,9 @@ const userValidationSchema = Yup.object({
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required"),
-  password: Yup.string().required("Password is required").min(6, "Password must be 6 characters or more"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be 6 characters or more"),
   confirm_password: Yup.string()
     .required("Confirm Password is required")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
@@ -50,27 +52,18 @@ function SignupForm() {
       email: formData.email,
       password: formData.password,
       options: {
+        data: { name: formData.name },
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
 
     if (error) {
       setIsLoading(false);
-      toast.error(error, { id: toastId });
+      toast.error(error.message, { id: toastId });
       return;
     }
 
-    // Add user to users table
-    const { error: userMetadataError } = addUserMetadata({
-      id: data.user.id,
-      email: data.user.email,
-      name: formData.name,
-    });
-
-    if (error) {
-      setIsLoading(false);
-      toast.error(userMetadataError, { id: toastId });
-    } else {
+    if (data) {
       setIsLoading(false);
       e.target.reset();
       toast.success(
