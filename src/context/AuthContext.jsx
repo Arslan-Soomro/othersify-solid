@@ -12,7 +12,7 @@ export function AuthProvider(props) {
       const {
         data: { user },
       } = await supabase.auth.getUser(); // Get User
-      console.log("[authContextProvider] user: ", user);
+      console.log("AauthContextProvider] user: ", user);
       if (user) {
         setUser(user);
         const { data, error } = await supabase // Get User Metadata by Email
@@ -38,3 +38,5 @@ export function AuthProvider(props) {
     </AuthContext.Provider>
   );
 }
+
+export function useAuthContext() { return useContext(AuthContext); }

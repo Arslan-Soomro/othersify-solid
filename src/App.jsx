@@ -7,6 +7,7 @@ import Login from "./components/Login/Login";
 import EmailRoutes from "./components/EmailApp/EmailRoutes";
 import Navbar from "./components/ui/Navbar";
 import { Toaster } from "solid-toast";
+import EmailConfirmationRedirect from "./components/EmailConfirmationRedirect";
 
 function App() {
   return (
@@ -16,9 +17,9 @@ function App() {
         <Route path="/" component={<Home />} />
         <Route path="/signup" component={<Signup />} />
         <Route path="/login" component={<Login />} />
+        <Route path="/auth/callback" component={<EmailConfirmationRedirect />} />
         {/* App Routes */}
-        <Route path="/a"> 
-        <Navbar />
+        <Route path="/a">
           {/* Email App Routes */}
           <EmailRoutes />
 
