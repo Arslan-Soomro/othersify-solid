@@ -15,3 +15,7 @@ export async function updateUserEmailVerificationStatus(userId, status) {
   if (error) console.log("[updateUserEmailVerificationStatus]: Error: ", error);
   return { error };
 }
+
+export async function getUserMetadata(userId) {
+  return await supabase.from("users").select().eq("id", userId);
+}

@@ -1,6 +1,7 @@
 import { createSignal, createContext, useContext } from "solid-js";
 import { supabase } from "../services/supabase";
 import LoadingScreen from "../components/LoadingScreen";
+import { getUserMetadata } from "../utils/supaUtils";
 
 const AuthContext = createContext();
 
@@ -18,14 +19,10 @@ export function AuthProvider(props) {
       console.log("[AuthContextProvider] user: ", user);
       if (user) {
         setUser(user);
-        const { data, error } = await supabase // Get User Metadata by Email
-          .from("users")
-          .select()
-          .eq("id", user?.id);
+        const { data, error } = await getUserMetadata(user?.id);
         if (error)
           console.log("[AuthContextProvider] Error@userMetadata: ", error);
         if (data) {
-          // console.log("[authContextProvider] User Metadata: ", data[0]);
           setIsLoading(false);
           setUserMetadata(data[0]);
         }
@@ -43,7 +40,10 @@ export function AuthProvider(props) {
     <AuthContext.Provider value={{ user, userMetadata }}>
       {/* Wait till the user loads so that whenever children consume the context, they have some value to work with */}
       <Show when={!isLoading()} fallback={<LoadingScreen />}>
-        {props.children}
+        {() => {
+          if(location.pathname === "signup") return <p>Hello World</p>
+          return props.children;
+        }}
       </Show>
     </AuthContext.Provider>
   );
