@@ -18,9 +18,9 @@ function App() {
   const navigate = useNavigate();
 
   onMount(() => {
-    if(user()) {
+    if(user()) { // Signed In User cannot access signup and login pages
       if(location.pathname.startsWith("/signup") || location.pathname.startsWith("/login")) navigate("/a/email/app", { replace: true });
-    }else {
+    }else { // Signed Out User cannot access email app pages
       if(location.pathname.startsWith("/a")) navigate("/login", { replace: true });
     }
   })
